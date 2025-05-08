@@ -1,3 +1,5 @@
 .env
 .DS_Store
-data/documents/*
+# Ignore PDF and text files in data/documents
+data/documents/
+
