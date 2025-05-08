@@ -1,0 +1,18 @@
+Tool Name: PNR.py
+
+Description: Assistance for Pod Not Ready alerts.
+
+Usage:
+PNR.py [-h] [-co CASE] [--webbrowser] [-v] [-c COLOR] [-p P] [-u U] [-a] [-s] [-t]
+
+Options:
+-h, --help: show this help message and exit
+-co CASE, --case CASE: Provide Jira case number for faster execution
+--webbrowser, -wb: Open case in Web Browser
+-v, --verbose: Verbose mode
+-c COLOR, --color COLOR: Specify what color the output should be
+-p P: Pod Name. Eg: primary-<instance>-jamfcloud-com-XXXXXXXXX-XXXX
+-u U: JSM Alert URL. Eg: https://jamfpdd.atlassian.net/jira/ops/alerts/edeb8266-8c0e-49af-928b-a8c294889b00-1740720666156
+-a: Get actions
+-s: Check Stuck Threads?
+-t: Tail logs?

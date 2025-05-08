@@ -1,0 +1,1 @@
+This document describes CloudOps tools, which are scripts written in Python to help the Cloud Operations Team handle cases and alerts for Jamf Pro

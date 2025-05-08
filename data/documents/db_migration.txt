@@ -1,0 +1,15 @@
+Tool Name: db_migration.py
+
+Description: Verify and upload database dumps for migration
+
+Usage:
+db_migration.py [-h] [-i INSTANCE] [-e ENVIRONMENT] [--profile PROFILE] [-v] [-c COLOR] [-f FILE]
+
+Options:
+-h, --help: show this help message and exit
+-i INSTANCE, --instance INSTANCE: Specifies the instance name that will be used to gather information. This will match the Salesforce asset name.
+-e ENVIRONMENT, --environment ENVIRONMENT: Specify an atlas environment
+--profile PROFILE: Specifies the profile to use from your ~/.aws/credentials file.
+-v, --verbose: Verbose mode
+-c COLOR, --color COLOR: Specify what color the output should be
+-f FILE, --file FILE: Path to the database dump file

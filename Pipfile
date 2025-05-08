@@ -1,0 +1,25 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pymupdf = "*"
+langchain = "*"
+fastapi = "*"
+uvicorn = "*"
+slack-sdk = "*"
+python-dotenv = "*"
+slack-bolt = "*"
+faiss-cpu = "*"
+sentence-transformers = "*"
+numpy = "*"
+boto3 = "*"
+openai = "*"
+flask = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.12"
+

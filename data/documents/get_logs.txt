@@ -1,0 +1,17 @@
+Tool Name: get_logs.py
+
+Description: Get Jamf Pro logs for an instance or a list of instances.
+
+Usage:
+get_logs.py [-h] [-i INSTANCE] [-e ENVIRONMENT] [-v] [-c COLOR] [-f FILEPATH] [--start START] [--end END] [-l]
+
+Options:
+-h, --help: show this help message and exit
+-i INSTANCE, --instance INSTANCE: Specifies the instance name that will be used to gather information. This will match the Salesforce asset name.
+-e ENVIRONMENT, --environment ENVIRONMENT: Specify an atlas environment
+-v, --verbose: Verbose mode
+-c COLOR, --color COLOR: Specify what color the output should be
+-f FILEPATH, --filepath FILEPATH: Filepath of CSV file containing list of instances. Each instance should be a separate row, no heading.
+--start START: Provide a start date for the logs (YYYY-MM-DD)
+--end END: Provide an end date for the logs (YYYY-MM-DD)
+-l, --logs: Log mode

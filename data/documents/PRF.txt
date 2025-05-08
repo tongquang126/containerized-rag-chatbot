@@ -1,0 +1,19 @@
+Tool Name: PRF.py
+
+Description: Assistance for Pod Readyness Flapping alerts.
+
+Usage:
+PRF.py [-h] [-i INSTANCE] [-e ENVIRONMENT] [--hidetitle] [-v] [-c COLOR] [-t] [-s] [-st] [-th] [--json]
+
+Options:
+-h, --help: show this help message and exit
+-i INSTANCE, --instance INSTANCE: Specifies the instance name that will be used to gather information. This will match the Salesforce asset name.
+-e ENVIRONMENT, --environment ENVIRONMENT: Specify an atlas environment
+--hidetitle: Hide title screen
+-v, --verbose: Verbose mode
+-c COLOR, --color COLOR: Specify what color the output should be
+-t: Take Thread Dump
+-s: Check Server Logs
+-st: Check Stuck Threads
+-th: Grab Thundering Herd 
+--json: Display output as JSON

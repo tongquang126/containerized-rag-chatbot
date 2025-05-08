@@ -1,0 +1,17 @@
+Tool Name: shell_runner.py
+
+Description: Initiate an interactive shell to a Tomcat server where a given instance is hosted.
+Inputs:
+- Instance name (-i)
+- Node type (primary/secondary) (-node)
+- AWS profile (-p)
+
+Usage:
+python3 /usr/local/bin/shell_runner.py [-h] [-i instance] [-p aws_profile] [-node node_type] [-v]
+
+Options:
+-h, --help: show this help message and exit
+-i instance: Provide instance name for faster execution
+-node node_type: Provide node type (primary/secondary) for faster execution
+-p aws_profile: Provide AWS profile if different from $JPRO_PROD_AWS_PROFILE environment variable
+-v: Verbose mode

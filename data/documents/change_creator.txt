@@ -1,0 +1,20 @@
+Tool Name: change_creator.py
+
+Description: Create standard and planned change controls.
+
+Usage:
+change_creator.py [-h] [-i INSTANCE] [-e ENVIRONMENT] [--profile PROFILE] [-co CASE] [-g] [--webbrowser] [-v] [-c COLOR] [-t TYPE | -m | -r]
+
+Options:
+-h, --help: show this help message and exit
+-i INSTANCE, --instance INSTANCE: Specifies the instance name that will be used to gather information. This will match the Salesforce asset name.
+-e ENVIRONMENT, --environment ENVIRONMENT: Specify an atlas environment
+--profile PROFILE: Specifies the profile to use from your ~/.aws/credentials file.
+-co CASE, --case CASE: Provide Jira case number for faster execution
+-g, --govcloud: GovCloud mode
+--webbrowser, -wb: Open case in Web Browser
+-v, --verbose: Verbose mode
+-c COLOR, --color COLOR: Specify what color the output should be
+-t TYPE, --type TYPE: Provide type of change control, [p]lanned, [s]tandard, [m]igration, or [r]estore
+-m, --migration: Same as '--type migration', creates migration SCC
+-r, --restore: Same as '--type restore', creates restore SCC

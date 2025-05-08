@@ -1,0 +1,16 @@
+Tool Name: action_kraken.py
+
+Description: Look up and monitor atlas actions
+
+Usage:
+action_kraken.py [-h] [-i INSTANCE] [-e ENVIRONMENT] [--hidetitle] [-v] [-c COLOR] [-a ACTION] [-n NUMBER] [-l LENGTH] [-r] [-m] [-d DATE]
+
+Options:
+-h, --help: show this help message and exit
+-i INSTANCE, --instance INSTANCE: Specifies the instance name that will be used to gather information. This will match the Salesforce asset name.
+-e ENVIRONMENT, --environment ENVIRONMENT: Specify an atlas environment
+--hidetitle: Hide title screen
+-v, --verbose: Verbose mode
+-c COLOR, --color COLOR: Specify what color the output should be
+-a ACTION, --action ACTION: Please enter the ID of an atlas (a)ction (eg. 01HGB7ZXFGFWGT4E7KXFP0QZAD)
+-n NUMBER, --number NUMBER

@@ -1,0 +1,17 @@
+Tool Name: kk.py
+
+Description: Kubernetes Kop (kk) - A tool for managing Kubernetes deployments
+
+Usage:
+kk.py [-h] [-v] [-e ENVIRONMENT] {pods,threads,logs,init} ...
+
+Positional Arguments:
+- pods: Get pod status
+- threads: Check for stuck threads
+- logs: Get pod logs
+- init: Confirm initialization
+
+Options:
+-h, --help: show this help message and exit
+-v, --verbose: Enable verbose mode
+-e ENVIRONMENT, --environment ENVIRONMENT: Specify the environment. Default: prod

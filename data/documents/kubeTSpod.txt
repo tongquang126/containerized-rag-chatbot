@@ -1,0 +1,28 @@
+Tool Name: kubeTSpod.py
+
+Description: Connect to pods, DBs, and run queries.
+
+Usage:
+kubeTSpod.py [-h] [-i INSTANCE] [-e ENVIRONMENT] [-co CASE] [-n] [-v] [-c COLOR] [-d] [-s] [-esc] [-q QUERY] [-t] [-j] [-com] [-des] [-paste] [-dryrun] [-nocom] [-con] [--list LIST]
+
+Options:
+-h, --help: show this help message and exit
+-i INSTANCE, --instance INSTANCE: Specifies the instance name that will be used to gather information. This will match the Salesforce asset name.
+-e ENVIRONMENT, --environment ENVIRONMENT: Specify an atlas environment
+-co CASE, --case CASE: Provide Jira case number for faster execution
+-n, --noninteractive: Do not ask any interactive questions
+-v, --verbose: Verbose mode
+-c COLOR, --color COLOR: Specify what color the output should be
+-d, --direct: Connect directly to DB
+-s, --stop: Stop deployment (so a snapshot can be taken, etc.)
+-esc, --escalate: Escalate DB privileges and take a snapshot of the database
+-q QUERY, --query QUERY: Query to run Eg. 'SELECT * from jss_server_url;'
+-t, --troubleshoot: Connects to the troubleshooting pod
+-j: Post select results to JIRA TICKET
+-com, --getlastcomment: Specifies that the last comment should be parsed.
+-des, --getdescription: Specifies that the description should be parsed.
+-paste: Allow the ability to paste contents of a file to search queries
+-dryrun: Dryrun mode. No queries will be run against database.
+-nocom, --nocomment: Do not add comment to jira ticket. Output to terminal.
+-con: Continue with the current action.
+--list LIST, -l LIST: Use with -q to query a comma separated list of instances.

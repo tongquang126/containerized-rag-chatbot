@@ -1,0 +1,17 @@
+Tool Name: muppet.py
+
+Description: Send emails via AWS SES from atlas email templates, or view/edit atlas email templates.
+
+Usage:
+python ./muppet.py [-h] [-i INSTANCE] [-e ENVIRONMENT] [-co CASE] [-v] [-c COLOR] [--version VERSION] [--slack SLACK] [--track TRACK]
+
+Options:
+-h, --help: show this help message and exit
+-i INSTANCE, --instance INSTANCE: Specifies the instance name that will be used to gather information. This will match the Salesforce asset name.
+-e ENVIRONMENT, --environment ENVIRONMENT: Specify an atlas environment
+-co CASE, --case CASE: Provide Jira case number for faster execution
+-v, --verbose: Verbose mode
+-c COLOR, --color COLOR: Specify what color the output should be
+--version VERSION: Provide the version to track
+--slack SLACK: Provide the slack channel to post updates
+--track TRACK: Provide the version track

@@ -1,0 +1,16 @@
+Tool Name: RDS_CPU.py
+
+Description: Assistance for RDS CPU Utilization alerts.
+
+Usage:
+python ./RDS_CPU.py [-h] [-v] [-c COLOR] [-i INSTANCE] [-r REGION] [-a ACCOUNT] [-e ENVIRONMENT] [-u URL]
+
+Options:
+-h, --help: show this help message and exit
+-v, --verbose: Verbose mode
+-c COLOR, --color COLOR: Specify what color the output should be
+-i INSTANCE, --instance INSTANCE: RDS instance. Eg: atlas-<hashcode>-instance-<hashcode>
+-r REGION, --region REGION: AWS region. Eg: us-west-2
+-a ACCOUNT, --account ACCOUNT: AWS account. Eg: jpro-external-prod
+-e ENVIRONMENT, --environment ENVIRONMENT: Environment. Eg: prod
+-u URL, --url URL: Alert URL

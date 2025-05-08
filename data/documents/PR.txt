@@ -1,0 +1,20 @@
+Tool Name: PR.py
+
+Description: Assistance with Pod Readiness alerts.
+
+Usage:
+PR.py [-h] [-i INSTANCE] [-e ENVIRONMENT] [--webbrowser] [-p POD] [-v] [-c COLOR] [-u U] [-r] [-x] [-o] [-m]
+
+Options:
+-h, --help: show this help message and exit
+-i INSTANCE, --instance INSTANCE: Specifies the instance name that will be used to gather information. This will match the Salesforce asset name.
+-e ENVIRONMENT, --environment ENVIRONMENT: Specify an atlas environment
+--webbrowser, -wb: Open case in Web Browser
+-p POD, --pod POD: Pod Name. Eg: primary-<instance>-jamfcloud-com-XXXXXXXXX-XXXX
+-v, --verbose: Verbose mode
+-c COLOR, --color COLOR: Specify what color the output should be
+-u U: Alert URL
+-r: Check Restart count
+-x: Check eXit codes
+-o: Check Old Logs
+-m: Check Memory allocation

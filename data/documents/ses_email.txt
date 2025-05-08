@@ -1,0 +1,20 @@
+Tool Name: ses_email.py
+
+Description: Send emails via AWS SES from atlas email templates, or view/edit atlas email templates.
+
+Usage:
+ses_email.py [-h] [-i INSTANCE] [-e ENVIRONMENT] [--hidetitle] [-n] [-v] [-c COLOR] [--profile PROFILE] [--to TO] [--bcc BCC] [--template TEMPLATE] [--print]
+
+Options:
+-h, --help: show this help message and exit
+-i INSTANCE, --instance INSTANCE: Specifies the instance name that will be used to gather information. This will match the Salesforce asset name.
+-e ENVIRONMENT, --environment ENVIRONMENT: Specify an atlas environment
+--hidetitle: Hide title screen
+-n, --noninteractive: Do not ask any interactive questions
+-v, --verbose: Verbose mode
+-c COLOR, --color COLOR: Specify what color the output should be
+--profile PROFILE: Specifies the profile to use from your ~/.aws/credentials file.
+--to TO: Specify email addresses (to) in comma separated format
+--bcc BCC: Specify email addresses (bcc) in comma separated format
+--template TEMPLATE: Specify email template id to use
+--print: Print out the templates available in the system

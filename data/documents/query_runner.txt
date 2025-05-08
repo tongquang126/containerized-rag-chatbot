@@ -1,0 +1,14 @@
+Tool Name: query_runner.py
+
+Description: Run SQL queries in a given instance's database.
+Inputs:
+- Instance name (-i)
+- AWS profile (-p)
+Usage:
+python3 /usr/local/bin/query_runner.py [-h] [-i instance_name] [-p aws_profile] [-v]
+
+Options:
+-h, --help: show this help message and exit
+-i instance_name: Provide instance name for faster execution
+-p aws_profile: Provide AWS profile if different from $JPRO_PROD_AWS_PROFILE environment variable
+-v: Verbose mode

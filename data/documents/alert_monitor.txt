@@ -1,0 +1,14 @@
+Tool Name: alert_monitor.py
+
+Description: Monitor for JSM alerts
+
+Usage:
+python alert_monitor.py [-h] [--webbrowser] [-v] [-c COLOR] [--hours HOURS] [-s SLEEP]
+
+Options:
+-h, --help: show this help message and exit
+--webbrowser, -wb: Open case in Web Browser
+-v, --verbose: Verbose mode
+-c COLOR, --color COLOR: Specify what color the output should be
+--hours HOURS: The number of hours to run the script for.
+-s SLEEP, --sleep SLEEP: How often to check for alerts in seconds

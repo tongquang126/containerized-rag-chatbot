@@ -1,0 +1,18 @@
+Tool Name: preflight3.py
+
+Description: Create a standard change control for a Premium upgrade
+
+Usage:
+preflight3.py [-h] [-i INSTANCE] [-e ENVIRONMENT] [--profile PROFILE] [-co CASE] [-g] [-sb] [-v] [-c COLOR] [-ver VERSION]
+
+Options:
+-h, --help: show this help message and exit
+-i INSTANCE, --instance INSTANCE: Specifies the instance name that will be used to gather information. This will match the Salesforce asset name.
+-e ENVIRONMENT, --environment ENVIRONMENT: Specify an atlas environment
+--profile PROFILE: Specifies the profile to use from your ~/.aws/credentials file.
+-co CASE, --case CASE: Provide Jira case number for faster execution
+-g, --govcloud: GovCloud mode
+-sb, --sandbox: Use the Everest Sandbox account
+-v, --verbose: Verbose mode
+-c COLOR, --color COLOR: Specify what color the output should be
+-ver VERSION, --version VERSION: Provide a version number

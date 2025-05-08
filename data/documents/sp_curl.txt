@@ -1,0 +1,14 @@
+Tool Name: sp_curl.py
+
+Description: Generate curl command for SharePoint file download
+
+Usage:
+sp_curl.py [-h] [-d | -c] [-b] [-p PATH] [-u URL]
+
+Options:
+-h, --help: show this help message and exit
+-d, --docs: Use 'Documents' SharePoint library (default)
+-c, --clopsur: Use 'Cloud Operations Upload Requests' SharePoint library
+-b, --backup: Set output directory to /mnt/databases/ for database backups
+-p PATH, --path PATH: Specify a custom output path for the downloaded file
+-u URL, --url URL: Specify a SharePoint URL instead of separate library and file path. IF using the URL from the file view, it must be inside double quote (") marks

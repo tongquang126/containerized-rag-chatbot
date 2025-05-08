@@ -1,0 +1,14 @@
+Tool Name: aws_cert_lister.py
+
+Description: Display certificate information for a domain name.
+Environments: AWS
+Inputs:
+- Domain name (-d)
+- AWS profile (-p)
+Usage:
+python3 /usr/local/bin/aws_cert_lister.py [-h] [-d domain_name] [-p aws_profile]
+
+Options:
+-h, --help: show this help message and exit
+-d domain_name: Provide domain name for faster execution
+-p aws_profile: Provide AWS profile if different from $JPRO_PROD_AWS_PROFILE environment variable

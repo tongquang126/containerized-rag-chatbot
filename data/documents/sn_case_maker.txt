@@ -1,0 +1,32 @@
+Tool Name: sn_case_maker.py
+
+Description: Creates a ServiceNow case for a problem Jamf Pro instance.
+
+Usage:
+sn_case_maker.py [-h] [-i INSTANCE] [-e ENVIRONMENT] [--profile PROFILE] [-co CASE] [-g] [-n] [-v] [-c COLOR] [-d] [-u] [-s] [--performance | --isolation | --logstream | --expiresoon | --expired | --massupgrade | --dnscert] [-f FILE] [-nr] [-rp] [-a ALERT] [-l LINK]
+
+Options:
+-h, --help: show this help message and exit
+-i INSTANCE, --instance INSTANCE: Specifies the instance name that will be used to gather information. This will match the Salesforce asset name.
+-e ENVIRONMENT, --environment ENVIRONMENT: Specify an atlas environment
+--profile PROFILE: Specifies the profile to use from your ~/.aws/credentials file.
+-co CASE, --case CASE: Provide Jira case number for faster execution
+-g, --govcloud: GovCloud mode
+-n, --noninteractive: Do not ask any interactive questions
+-v, --verbose: Verbose mode
+-c COLOR, --color COLOR: Specify what color the output should be
+-d, --dev: Use Dev Service Now environment
+-u, --urgent: Make all cases at highest urgency level
+-s, --skipth: Skip Thundering Herds
+--performance: Open a performance degradation case
+--isolation: Open an isolation case
+--logstream: Open a log stream error case
+--expiresoon: Open an SSL soon to expire case
+--expired: Open an SSL expired case
+--massupgrade: Open a failed mass upgrade case
+--dnscert: Open a DNS Certificate Switch case
+-f FILE, --file FILE: Specify the file with path that instances should be read from
+-nr, --norecent: Skip showing recent cases
+-rp, --reduceprint: Reduce how much info is printed to the screen
+-a ALERT, --alert ALERT: Provide an alert link so the case can be linked to the alert
+-l LINK, --link LINK: Provide an OpsGenie alert link to add the case to

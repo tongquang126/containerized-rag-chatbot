@@ -1,0 +1,20 @@
+Tool Name: cert_check.py
+
+Description: Send email to customer contacts with AWS certificate expiration details.
+
+Usage:
+cert_check.py [-h] [-i INSTANCE] [-e ENVIRONMENT] [--profile PROFILE] [-co CASE] [-sb] [-n] [-v] [-c COLOR] [-f FILE] [--caseonly] [--ses_profile SES_PROFILE]
+
+Options:
+-h, --help: show this help message and exit
+-i INSTANCE, --instance INSTANCE: Specifies the instance name that will be used to gather information. This will match the Salesforce asset name.
+-e ENVIRONMENT, --environment ENVIRONMENT: Specify an atlas environment
+--profile PROFILE: Specifies the profile to use from your ~/.aws/credentials file.
+-co CASE, --case CASE: Provide Jira case number for faster execution
+-sb, --sandbox: Use the Everest Sandbox account
+-n, --noninteractive: Do not ask any interactive questions
+-v, --verbose: Verbose mode
+-c COLOR, --color COLOR: Specify what color the output should be
+-f FILE, --file FILE: Provide a text document or email file instead of a jira case
+--caseonly: Make Jira cases only, do not process any other actions
+--ses_profile SES_PROFILE: AWS profile to use for SES email sending

@@ -1,0 +1,15 @@
+Tool Name: thundering_herd.py
+
+Description: Run thundering herds queries on and instance and return a link to the results.
+
+Usage:
+thundering_herd.py [-h] [-i INSTANCE] [-e ENVIRONMENT] [--profile PROFILE] [-co CASE] [-v] [-c COLOR]
+
+Options:
+-h, --help: show this help message and exit
+-i INSTANCE, --instance INSTANCE: Specifies the instance name that will be used to gather information. This will match the Salesforce asset name.
+-e ENVIRONMENT, --environment ENVIRONMENT: Specify an atlas environment
+--profile PROFILE: Specifies the profile to use from your ~/.aws/credentials file.
+-co CASE, --case CASE: Provide Jira case number for faster execution
+-v, --verbose: Verbose mode
+-c COLOR, --color COLOR: Specify what color the output should be

@@ -1,0 +1,24 @@
+Tool Name: peter_peter.py
+
+Description: Repeat a command over the items in a file or the files in a directory
+
+Usage:
+python ./peter_peter.py [-h] [-i INSTANCE] [-e ENVIRONMENT] [-v] [-c COLOR] [-d DIRECTORY] [-f FILE] [--command COMMAND] [-t THREADS] [-s SLEEP] [-r REPEAT] [--dryrun] [--filter FILTER] [--list LIST] [--start-time START_TIME] [--cluster CLUSTER]
+
+Options:
+-h, --help: show this help message and exit
+-i INSTANCE, --instance INSTANCE: Specifies the instance name that will be used to gather information. This will match the Salesforce asset name.
+-e ENVIRONMENT, --environment ENVIRONMENT: Specify an atlas environment
+-v, --verbose: Verbose mode
+-c COLOR, --color COLOR: Specify what color the output should be
+-d DIRECTORY, --directory DIRECTORY: Provide a directory of files to run on
+-f FILE, --file FILE: Provide a text file with a list of items to run on
+--command COMMAND: Provide the command inside double quotes (") to run with star (*) as the item to replace. If star (*) is absent, items will be added to the end of the command.
+-t THREADS, --threads THREADS: Provide the number of threads to run simultaneously
+-s SLEEP, --sleep SLEEP: Provide a delay in seconds between each repetition or thread (in that order)
+-r REPEAT, --repeat REPEAT: How many times to run the process on each item (repetitions will come after threads)
+--dryrun: Print the commands without running them
+--filter FILTER: Specify a Jira filter to get case numbers from
+--list LIST: Specify a list with comma-separated values
+--start-time START_TIME: Schedule execution to start at a specific time (format: HH:MM in 24-hour format)
+--cluster CLUSTER: Pull instance names from a cluster

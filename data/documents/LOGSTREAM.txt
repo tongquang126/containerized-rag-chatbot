@@ -1,0 +1,15 @@
+Tool Name: LOGSTREAM.py
+
+Description: Help for processing LogStream alerts
+
+Usage:
+LOGSTREAM.py [-h] [-i INSTANCE] [-e ENVIRONMENT] [-v] [-c COLOR] [-u URL] [-t TYPE]
+
+Options:
+-h, --help: show this help message and exit
+-i INSTANCE, --instance INSTANCE: Specifies the instance name that will be used to gather information. This will match the Salesforce asset name.
+-e ENVIRONMENT, --environment ENVIRONMENT: Specify an atlas environment
+-v, --verbose: Verbose mode
+-c COLOR, --color COLOR: Specify what color the output should be
+-u URL, --url URL: Alert link
+-t TYPE, --type TYPE: Provide the type of alert

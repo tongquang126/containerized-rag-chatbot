@@ -1,0 +1,15 @@
+Tool Name: set_downtime.py
+
+Description: Create New Relic muting rules or set SDT in LogicMonitor.
+
+Usage:
+set_downtime.py [-h] [-i INSTANCE] [-e ENVIRONMENT] [--profile PROFILE] [-v] [-c COLOR] [-t TIME]
+
+Options:
+-h, --help: show this help message and exit
+-i INSTANCE, --instance INSTANCE: Specifies the instance name that will be used to gather information. This will match the Salesforce asset name.
+-e ENVIRONMENT, --environment ENVIRONMENT: Specify an atlas environment
+--profile PROFILE: Specifies the profile to use from your ~/.aws/credentials file.
+-v, --verbose: Verbose mode
+-c COLOR, --color COLOR: Specify what color the output should be
+-t TIME, --time TIME: Provide length of muting rule and/or SDT (in minutes) for faster execution
