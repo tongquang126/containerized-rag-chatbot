@@ -1,0 +1,18 @@
+# RAG System Configuration
+
+# S3 Bucket Paths
+s3_document_bucket: "s3://containerized-rag-chatbot/data/documents/documents/"
+s3_index_bucket: "s3://containerized-rag-chatbot/data/faiss_index/"
+
+# Embedding Settings
+embedding_model: "all-MiniLM-L6-v2"  # Good balance of speed and quality
+# Other options: 
+# - "all-mpnet-base-v2" (higher quality but slower)
+# - "paraphrase-MiniLM-L3-v2" (fastest but lower quality)
+
+# Text Chunking Settings
+chunk_size: 1000
+chunk_overlap: 200
+
+# Logging Configuration
+log_level: "INFO"  # Options: DEBUG, INFO, WARNING, ERROR

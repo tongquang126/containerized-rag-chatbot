@@ -1,84 +1,4 @@
-# # src/retriever.py
-
-# """
-# Retriever module for loading FAISS index and retrieving relevant documents.
-# """
-
-# import os
-# import faiss
-# import pickle
-# import numpy as np
-# from sentence_transformers import SentenceTransformer
-
-# # Load embedding model
-# embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
-
-# # Initialize global variables for FAISS index and metadata
-# index = None
-# metadata = None
-
-# def load_faiss_index(faiss_dir: str = "./data/faiss_index"):
-#     global index, metadata
-
-#     index_path = os.path.join(faiss_dir, "faiss.index")
-#     metadata_path = os.path.join(faiss_dir, "metadata.pkl")
-
-#     if not os.path.exists(index_path):
-#         raise FileNotFoundError(f"FAISS index not found at {index_path}")
-#     if not os.path.exists(metadata_path):
-#         raise FileNotFoundError(f"Metadata file not found at {metadata_path}")
-
-#     index = faiss.read_index(index_path)
-#     with open(metadata_path, "rb") as f:
-#         metadata = pickle.load(f)
-    
-#     print(f"Loaded {len(metadata)} documents.")  # Log the number of documents
-#     return
-
-# def retrieve(query: str, top_k: int = 3):
-#     if top_k <= 0:
-#         raise ValueError("top_k must be greater than 0")
-#     if index is None or metadata is None:
-#         raise RuntimeError("FAISS index and metadata must be loaded with `load_faiss_index()` first.")
-
-#     # Encode the query into embedding vector
-#     vector = embedding_model.encode([query])
-#     print(f"Query embedding: {vector}")  # Log the query embedding
-
-#     # Search FAISS index
-#     distances, indices = index.search(np.array(vector), top_k)
-#     print(f"Retrieved indices: {indices}")  # Log the indices
-
-#     # Collect matched metadata
-#     results = []
-#     for idx in indices[0]:
-#         if idx < len(metadata):
-#             results.append(metadata[idx])
-#     print(f"Retrieved {len(results)} documents.")  # Log the number of retrieved documents
-#     return results
-
-
-# def retrieve_documents(query: str, top_k: int = 3) -> str:
-#     load_faiss_index()
-#     matches = retrieve(query, top_k)
-#     print(f"Matches retrieved: {matches}")  # Log the matches
-
-#     combined_content = "\n\n".join(doc.get("text", "") for doc in matches)
-#     print(f"Combined content: {combined_content}")  # Log the combined content
-#     return combined_content
-
-# src/retriever.py
-"""
-retriever.py
-
-This module loads a FAISS index and retrieves relevant document chunks for a given query.
-It uses the same SentenceTransformer model as loader.py to embed the query and performs
-a similarity search to return the top-k most relevant chunks.
-
-Usage:
-    python retriever.py --index-path ./data/faiss_index --query "What is Cloudops tool?" --top-k 3
-"""
-
+import sys
 import argparse
 import logging
 import os
@@ -86,6 +6,13 @@ import pickle
 import faiss
 import numpy as np
 from sentence_transformers import SentenceTransformer
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Import the s3_utils module
+from s3_utils import download_faiss_index_from_s3
 
 # Configure logging
 logging.basicConfig(
@@ -102,35 +29,73 @@ embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 class Retriever:
     """Class to handle loading FAISS index and retrieving relevant document chunks."""
     
-    def __init__(self, index_path):
+    def __init__(self, index_path=None):
         """
         Initialize the retriever by loading the FAISS index, texts, and metadata.
+        If the index doesn't exist locally, it downloads from S3 using environment variables.
 
         Args:
-            index_path (str): Directory containing the FAISS index, texts, and metadata.
+            index_path (str, optional): Override the directory containing the FAISS index.
+                                        If None, uses LOCAL_FAISS_PATH from .env file.
         """
-        self.index, self.texts, self.metadata = self._load_index_and_metadata(index_path)
-    
-    def _load_index_and_metadata(self, index_path):
+        # Use provided index_path or get from environment variable
+        self.index_path = index_path or os.getenv('LOCAL_FAISS_PATH')
+        
+        if not self.index_path:
+            raise ValueError("No index path provided. Set LOCAL_FAISS_PATH in .env or provide index_path parameter.")
+            
+        logger.info(f"Using index path: {self.index_path}")
+            
+        # Ensure the FAISS index exists locally, if not download from S3
+        self.index, self.texts, self.metadata = self._load_index_and_metadata()
+
+    def _ensure_local_directory(self):
+        """
+        Ensure the local directory for the FAISS index exists.
+        Create it if it doesn't exist.
+        """
+        if not os.path.exists(self.index_path):
+            logger.info(f"Creating local directory: {self.index_path}")
+            try:
+                os.makedirs(self.index_path, exist_ok=True)
+                logger.info(f"Successfully created directory: {self.index_path}")
+                return True
+            except Exception as e:
+                logger.error(f"Failed to create directory {self.index_path}: {e}")
+                return False
+        return True
+            
+    def _load_index_and_metadata(self):
         """
         Load the FAISS index, text chunks, and metadata from the specified directory.
-
-        Args:
-            index_path (str): Directory containing the FAISS index and metadata.
+        If not found locally, download them from S3 using environment variables.
 
         Returns:
             tuple: (faiss.Index, List[str], List[dict]) - FAISS index, text chunks, and metadata.
         """
         try:
-            # Load FAISS index
-            faiss_path = os.path.join(index_path, "faiss.index")
+            # Ensure the local directory exists
+            if not self._ensure_local_directory():
+                raise FileNotFoundError(f"Cannot create or access directory {self.index_path}")
+            
+            faiss_path = os.path.join(self.index_path, "faiss.index")
+            
+            # Check if the FAISS index exists
             if not os.path.exists(faiss_path):
-                raise FileNotFoundError(f"FAISS index not found at {faiss_path}")
+                logger.warning(f"FAISS index not found locally at {faiss_path}. Attempting to download from S3.")
+                
+                # Download from S3 using environment variables
+                if download_faiss_index_from_s3():
+                    logger.info("Successfully downloaded FAISS index from S3")
+                else:
+                    raise FileNotFoundError(f"Failed to download FAISS index from S3. Please check your environment variables.")
+            
+            # Load FAISS index
             index = faiss.read_index(faiss_path)
             logger.info(f"Loaded FAISS index from {faiss_path}")
 
             # Load text chunks
-            texts_path = os.path.join(index_path, "texts.pkl")
+            texts_path = os.path.join(self.index_path, "texts.pkl")
             if not os.path.exists(texts_path):
                 logger.warning(f"Text chunks not found at {texts_path}")
                 texts = []
@@ -140,7 +105,7 @@ class Retriever:
                 logger.info(f"Loaded {len(texts)} text chunks from {texts_path}")
 
             # Load metadata
-            metadata_path = os.path.join(index_path, "metadata.pkl")
+            metadata_path = os.path.join(self.index_path, "metadata.pkl")
             if not os.path.exists(metadata_path):
                 logger.warning(f"Metadata not found at {metadata_path}")
                 metadata = []
@@ -222,11 +187,11 @@ if __name__ == "__main__":
     Command-line interface to query the FAISS index.
 
     Example:
-        python retriever.py --index-path ./data/faiss_index --query "What is Cloudops tool?" --top-k 3
+        python retriever.py --query "What is Cloudops tool?" --top-k 3
     """
     parser = argparse.ArgumentParser(description="Retrieve relevant document chunks from a FAISS index")
-    parser.add_argument("--index-path", default="./data/faiss_index", 
-                        help="Directory containing the FAISS index and metadata")
+    parser.add_argument("--index-path", type=str, default=None, 
+                        help="Optional: Directory containing the FAISS index and metadata (overrides LOCAL_FAISS_PATH)")
     parser.add_argument("--query", default="What is Cloudops tool?", 
                         help="Query string to search for")
     parser.add_argument("--top-k", type=int, default=3, 
@@ -243,7 +208,7 @@ if __name__ == "__main__":
 
     try:
         # Initialize the retriever
-        retriever = Retriever(args.index_path)
+        retriever = Retriever(index_path=args.index_path)
 
         # Retrieve relevant documents
         results = retriever.retrieve(args.query, args.top_k)
