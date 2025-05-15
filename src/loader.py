@@ -1,4 +1,3 @@
-
 """
 loader.py
 
@@ -11,7 +10,7 @@ Usage:
         python src/loader.py --mode local --input ./data/documents --output ./data/faiss_index
         python src/loader.py --mode s3 --input documents/ --bucket my-bucket --output ./data/faiss_index
 """
-
+from dotenv import load_dotenv
 import os
 import io
 import boto3
@@ -27,6 +26,13 @@ import numpy as np
 import pickle
 import time
 import traceback
+
+# Load .env variables
+load_dotenv()
+
+# Environment variables
+S3_INDEX_PATH = os.getenv("S3_INDEX_PATH", "data/faiss_index/")
+LOCAL_FAISS_PATH = os.getenv("LOCAL_FAISS_PATH", "/tmp/faiss_index")
 
 # Configure logging
 logging.basicConfig(
@@ -352,18 +358,31 @@ def process_local(folder_path, output_path, chunk_size=500, chunk_overlap=50):
         logger.error(f"Error processing documents: {e}")
         logger.error(traceback.format_exc())
 
-
-def process_s3(bucket, prefix, output_path, chunk_size=500, chunk_overlap=50):
+def process_s3(bucket=None, prefix=None, output_path=None, chunk_size=500, chunk_overlap=50):
     """
     Process all PDF and TXT files in a given S3 bucket and prefix, generate embeddings and save FAISS index.
+    Then uploads the saved index and metadata to the specified S3 output path.
 
     Args:
-        bucket (str): S3 bucket name.
-        prefix (str): Prefix in the S3 bucket.
-        output_path (str): Path to output FAISS index and metadata.
+        bucket (str or None): S3 bucket name. If None, loaded from .env (S3_BUCKET_NAME).
+        prefix (str): Prefix in the S3 bucket to search for documents (e.g., 'data/documents/').
+        output_path (str or None): S3 prefix to store FAISS index (e.g., 'data/faiss_index/').
         chunk_size (int): Size of each text chunk.
         chunk_overlap (int): Overlap between consecutive chunks.
     """
+    # Load .env values
+    bucket = bucket or os.getenv("S3_BUCKET_NAME")
+    output_path = output_path or os.getenv("S3_INDEX_PATH", "data/faiss_index/")
+    LOCAL_FAISS_PATH = os.getenv("LOCAL_FAISS_PATH", "/tmp/faiss_index")
+
+    if not bucket:
+        logger.error("S3 bucket is not provided and not found in environment variable S3_BUCKET_NAME.")
+        return
+
+    if not prefix:
+        logger.error("S3 prefix must be provided to locate documents (e.g., 'data/documents/').")
+        return
+
     s3 = boto3.client("s3")
     all_texts = []
     metadata = []
@@ -371,87 +390,81 @@ def process_s3(bucket, prefix, output_path, chunk_size=500, chunk_overlap=50):
     start_time = time.time()
 
     try:
-        # Use pagination to handle more than 1000 objects
         paginator = s3.get_paginator('list_objects_v2')
         page_iterator = paginator.paginate(Bucket=bucket, Prefix=prefix)
-        
+
         for page in page_iterator:
-            if 'Contents' not in page:
-                logger.warning(f"No objects found in {bucket}/{prefix}")
-                continue
-                
-            for obj in page['Contents']:
+            for obj in page.get('Contents', []):
                 key = obj['Key']
-                size = obj['Size']
-                last_modified = obj['LastModified']
-                
-                if key.lower().endswith('.pdf'):
-                    logger.info(f"Processing S3 PDF: {bucket}/{key}")
+                if key.lower().endswith(".pdf"):
+                    logger.info(f"Processing PDF from S3: {key}")
                     text = read_pdf_s3(s3, bucket, key)
-                elif key.lower().endswith('.txt'):
-                    logger.info(f"Processing S3 TXT: {bucket}/{key}")
+                elif key.lower().endswith(".txt"):
+                    logger.info(f"Processing TXT from S3: {key}")
                     text = read_txt_s3(s3, bucket, key)
                 else:
                     continue
-                
+
                 if not text.strip():
-                    logger.warning(f"Empty or failed to extract text from {bucket}/{key}")
+                    logger.warning(f"Empty or failed to extract text from S3 file {key}")
                     continue
-                
-                file_metadata = get_file_metadata(
-                    key, 
-                    file_size=size, 
-                    last_modified=last_modified,
-                    is_s3=True
-                )
-                
+
+                file_metadata = get_file_metadata(key, obj.get("Size"), obj.get("LastModified"), is_s3=True)
                 chunks = split_text(text, chunk_size, chunk_overlap)
                 logger.info(f"Split into {len(chunks)} chunks")
-                
+
                 all_texts.extend(chunks)
-                
+
                 for i, chunk in enumerate(chunks):
                     chunk_metadata = file_metadata.copy()
                     chunk_metadata.update({
                         "chunk_index": i,
                         "chunk_size": len(chunk),
-                        "total_chunks": len(chunks),
-                        "s3_bucket": bucket
+                        "total_chunks": len(chunks)
                     })
                     metadata.append(chunk_metadata)
-                
+
                 file_count += 1
 
         if not all_texts:
-            logger.warning("No valid text found in any documents!")
+            logger.warning("No valid text found in any S3 documents!")
             return
 
         logger.info(f"Found {file_count} files with {len(all_texts)} chunks in total")
-        
+
         logger.info("Generating embeddings...")
         embeddings = embed_texts(all_texts)
-        
+
         logger.info("Creating FAISS index...")
         index = create_faiss_index(embeddings)
-        
-        logger.info(f"Saving index and metadata to {output_path}...")
-        save_index(index, output_path, all_texts, metadata)
-        
+
+        # Save index and metadata locally
+        os.makedirs(LOCAL_FAISS_PATH, exist_ok=True)
+        logger.info(f"Saving index and metadata to {LOCAL_FAISS_PATH}...")
+        save_index(index, LOCAL_FAISS_PATH, all_texts, metadata)
+
+        # Upload to S3 using output_path as S3 prefix
+        logger.info(f"Uploading FAISS index files to s3://{bucket}/{output_path}")
+        for filename in os.listdir(LOCAL_FAISS_PATH):
+            local_file_path = os.path.join(LOCAL_FAISS_PATH, filename)
+            s3_key = f"{output_path.rstrip('/')}/{filename}"
+            s3.upload_file(local_file_path, bucket, s3_key)
+            logger.info(f"Uploaded {local_file_path} to s3://{bucket}/{s3_key}")
+
         elapsed_time = time.time() - start_time
-        logger.info(f"Processing completed in {elapsed_time:.2f} seconds")
+        logger.info(f"Processing and upload completed in {elapsed_time:.2f} seconds")
 
     except Exception as e:
         logger.error(f"Error processing S3 documents: {e}")
         logger.error(traceback.format_exc())
-
 
 if __name__ == "__main__":
     """
     Command-line interface to run this script locally or on S3.
 
     Example:
-        python loader.py --mode local --input ./data/documents --output ./data/faiss_index
-        python loader.py --mode s3 --bucket my-bucket --input documents/ --output ./data/faiss_index
+        python src/loader.py --mode local --input ./data/documents --output ./data/faiss_index
+        python src/loader.py --mode s3 --bucket containerized-rag-chatbot --input data/documents --output data/faiss_index 
     """
     parser = argparse.ArgumentParser(description="Process documents and create FAISS index for RAG")
     parser.add_argument("--mode", choices=["local", "s3"], required=True, help="Mode to run: local or s3")

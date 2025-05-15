@@ -1,7 +1,7 @@
 [[source]]
+name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
-name = "pypi"
 
 [packages]
 pymupdf = "*"
@@ -17,9 +17,12 @@ numpy = "*"
 boto3 = "*"
 openai = "*"
 flask = "*"
+pdfplumber = "*"
+watchdog = "*"
+pypdf2 = "*"
+langchain-community = "*"
 
 [dev-packages]
 
 [requires]
 python_version = "3.12"
-
